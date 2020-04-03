@@ -1,0 +1,10 @@
+name: "stocks-website"
+output:
+  html_document:
+    theme: paper
+    highlight: default
+    toc: false
+    toc_float: false
+    css: styles.css
+
+      

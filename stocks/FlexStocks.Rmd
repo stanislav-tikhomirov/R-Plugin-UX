@@ -1,0 +1,136 @@
+---
+title: "FlexStocks"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: columns
+params:
+  symbol: IBM
+---
+This website is a POC *Analytical Stocks App* in which the R capabilities of various tools/packages are used to explore the possibilities for **financial reporting**---a site fully conceived within a digital environment---instead of a **self-run report** that simply is an outputted html file.
+
+### About
+
+The following tools were used to develop this site:
+
+* [`R`](https://www.r-project.org/): `R` is a software language and programming environment for statistical computing and for the graphical analysis of data.
+* [`Rmarkdown`](http://rmarkdown.rstudio.com/index.html): `Rmarkdown` is a package for `R` that combines simple `markdown` authoring tools for formatting text with chunks of `R` code; when compiled using [`knitr`](http://yihui.name/knitr/) the resulting output is a formatted document that contains the results of executing the embedded `R` code. Although `Rmarkdown` can produce files in a variety of formats, the two of particular interest in this project are `html` and `pdf` formats.
+* `R Packages`: One of the strengths of `R` is the availability of packages of `R` functions that are designed to work with data. The materials in this project, for example, use the [`flexdashboard`](http://rmarkdown.rstudio.com/flexdashboard/index.html) package to create some dashboards, [`quantmod`](https://cran.r-project.org/web/packages/quantmod/index.html) and the [`dygraphs`](https://rstudio.github.io/dygraphs/) packages to create interactive stock reports.
+
+
+### References
+
+A collection of external references that users might find useful. Where possible, links to the sources are included.
+
+
+```{r setup, include=FALSE}
+library(dygraphs)
+library(quantmod)
+library(flexdashboard)
+
+getSymbols(c("MSFT", "HPQ", "INTC", "TSLA", "AAPL", "AMZN", "NVDA", "AMD"), from = "2014-01-01", auto.assign=TRUE)
+```
+
+### Microsoft
+
+```{r}
+dygraph(MSFT[,2:4], group = "stocks") %>% 
+  dySeries(c("MSFT.Low", "MSFT.Close", "MSFT.High"), label = "MSFT")
+prices <- round(getSymbols("MSFT", auto.assign = FALSE), 2)
+DT::datatable(data.frame(prices[, 1:4], 2))
+```
+
+### HP
+
+```{r}
+dygraph(HPQ[,2:4], group = "stocks") %>% 
+  dySeries(c("HPQ.Low", "HPQ.Close", "HPQ.High"), label = "HPQ")
+prices <- round(getSymbols("HPQ", auto.assign = FALSE), 2)
+DT::datatable(data.frame(prices[, 1:4], 2))
+```
+
+### Intel
+
+```{r}
+dygraph(INTC[,2:4], group = "stocks") %>% 
+  dySeries(c("INTC.Low", "INTC.Close", "INTC.High"), label = "INTC")
+prices <- round(getSymbols("INTC", auto.assign = FALSE), 2)
+DT::datatable(data.frame(prices[, 1:4], 2))
+```
+
+### Tesla
+
+```{r}
+dygraph(TSLA[,2:4], group = "stocks") %>%
+  dySeries(c("TSLA.Low", "TSLA.Close", "TSLA.High"), label = "TSLA")
+prices <- round(getSymbols("TSLA", auto.assign = FALSE), 2)
+DT::datatable(data.frame(prices[, 1:4], 2))
+```
+
+### Apple
+
+```{r}
+dygraph(AAPL[,2:4], group = "stocks") %>%
+  dySeries(c("APPL.Low", "APPL.Close", "APPL.High"), label = "AAPL")
+prices <- round(getSymbols("AAPL", auto.assign = FALSE), 2)
+DT::datatable(data.frame(prices[, 1:4], 2))
+```
+
+### Amazon
+
+```{r}
+dygraph(AMZN[,2:4], group = "stocks") %>%
+  dySeries(c("AMZN.Low", "AMZN.Close", "AMZN.High"), label = "AMZN")
+prices <- round(getSymbols("AMZN", auto.assign = FALSE), 2)
+DT::datatable(data.frame(prices[, 1:4], 2))
+```
+
+### Nvidia
+
+```{r}
+dygraph(NVDA[,2:4], group = "stocks") %>%
+  dySeries(c("NVDA.Low", "NVDA.Close", "NVDA.High"), label = "NVDA")
+prices <- round(getSymbols("NVDA", auto.assign = FALSE), 2)
+DT::datatable(data.frame(prices[, 1:4], 2))
+```
+
+### AMD
+
+```{r}
+dygraph(AMD[,2:4], group = "stocks") %>%
+  dySeries(c("AMD.Low", "AMD.Close", "AMD.High"), label = "AMD")
+prices <- round(getSymbols("AMD", auto.assign = FALSE), 2)
+DT::datatable(data.frame(prices[, 1:4], 2))
+```
+
+## `r params$symbol`
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(quantmod)
+library(BCEA)
+library(archdata)
+
+prices <- round(getSymbols(params$symbol, auto.assign = FALSE), 2)
+close <- Cl(last(prices))
+open <- Op(last(prices))
+```
+
+The stock closed `r ifelse(open>close,'up','down')` at `r close` dollars per share yesterday.
+
+## Price History
+
+The chart below is made with the `quantmod` R package, a widely used package for collecting and visualizing financial data in R. You can learn more about `quantmod` at the website https://cran.r-project.org/web/packages/quantmod/index.html
+***
+
+```{r echo=FALSE}
+chartSeries(prices, theme = chartTheme("white", bg.col = "white"))
+```
+
+## Raw Data
+
+The table below displays the daily price data for the stock. In the next section, we will learn how to make a concise, interactive table with the `DT` package, a new package for making searchable data tables. You can learn more about the `DT` package at the website https://rstudio.github.io/DT/
+***
+
+```{r echo=FALSE}
+DT::datatable(data.frame(prices[, 1:4], 2))
+```
