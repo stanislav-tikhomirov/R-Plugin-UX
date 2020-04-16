@@ -19,6 +19,4 @@
 
 5. In ‘stocks’ folder there is FlexStocks RMarkdown file. Knit it. If there are any errors - fix them.
 
-6. Check version of ‘dplyr’ package.
-
-7. If you did not use packages ‘BCEA’ and ‘archdata’ before - delete them.
+6. In request.R there are some bugs in the code. Use debugger to locate and fix them.
